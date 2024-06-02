@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGptDto } from './dto/create-gpt.dto';
-import { UpdateGptDto } from './dto/update-gpt.dto';
+
+import OpenAI from 'openai';
+
+import { orthographyCheckUseCase } from './use-cases';
+import { OrthographyDto } from './dtos';
 
 @Injectable()
 export class GptService {
-  create(createGptDto: CreateGptDto) {
-    return 'This action adds a new gpt';
+
+  private openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+
+
+  // Solo va a llamar casos de uso
+
+  async orthographyCheck(orthographyDto: OrthographyDto) {
+    return await orthographyCheckUseCase( this.openai, {
+      prompt: orthographyDto.prompt
+    });
   }
 
-  findAll() {
-    return `This action returns all gpt`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gpt`;
-  }
 
-  update(id: number, updateGptDto: UpdateGptDto) {
-    return `This action updates a #${id} gpt`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} gpt`;
-  }
 }
